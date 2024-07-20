@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font: x-large "Times New Roman";
+            height: 297mm;
+            width: 210mm;
+            margin: 0;
+        }
+
+        @media print {
+            html,
+            body {
+                height: 99%;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var divs = [];
+
+            const xmargin = 20;
+            const ymargin = 35;
+
+            function rand(min, max) {
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+
+            function freePosition(d, ds) {
+                for (var j = 0; j < ds.length; j++) {
+                    var rect1 = d.getBoundingClientRect();
+                    var rect2 = ds[j].getBoundingClientRect();
+                    var overlap = !(rect1.right < rect2.left ||
+                        rect1.left > rect2.right ||
+                        rect1.bottom < rect2.top ||
+                        rect1.top > rect2.bottom);
+                    if (overlap) return false;
+                }
+                return true;
+            }
+
+            for (var i = 1; i < 100; i++) {
+                let div = document.createElement('div');
+                div.id = 'content' + i;
+                div.innerHTML = '<span>' + i + '</span>';
+                div.style.position = 'absolute';
+                div.style.left = '0mm';
+                div.style.top = '0mm';
+                document.body.appendChild(div);
+                do {
+                    let x = rand(0 + xmargin, 210 - xmargin);
+                    let y = rand(0 + ymargin, 297 - ymargin);
+                    div.style.left = x + 'mm';
+                    div.style.top = y + 'mm';
+                } while (!freePosition(div, divs))
+                divs.push(div);
+            }
+        });
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
